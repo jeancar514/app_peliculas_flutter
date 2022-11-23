@@ -8,8 +8,11 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 
 class HomePage extends StatelessWidget {
   final peliculasProvider = new PeliculasProvider();
+
   @override
   Widget build(BuildContext context) {
+    peliculasProvider.getPopulares();
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
@@ -20,6 +23,7 @@ class HomePage extends StatelessWidget {
         ],
       ),
       body: Container(
+        margin: EdgeInsets.only(bottom: 5.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
@@ -70,14 +74,17 @@ class HomePage extends StatelessWidget {
           SizedBox(
             height: 10.0,
           ),
-          FutureBuilder(
-            future: peliculasProvider.getPopulares(),
+          StreamBuilder(
+            stream: peliculasProvider.popularesStream,
             builder: (
               BuildContext context,
               AsyncSnapshot<List> snapshot,
             ) {
               if (snapshot.hasData) {
-                return MovieHorizontal(peliculas: snapshot.data);
+                return MovieHorizontal(
+                  peliculas: snapshot.data,
+                  siguientePagina: peliculasProvider.getPopulares,
+                );
               } else {
                 return Center(child: CircularProgressIndicator());
               }
