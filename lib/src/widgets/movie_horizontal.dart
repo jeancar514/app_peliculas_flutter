@@ -25,17 +25,23 @@ class MovieHorizontal extends StatelessWidget {
     });
     return Container(
       height: _screenSize.height * 0.3,
-      child: PageView(
+      child: PageView.builder(
         pageSnapping: false,
         controller: _pageController,
-        children: _tarjetas(context),
+        itemCount: peliculas.length,
+        itemBuilder: (BuildContext context, int index) =>
+            _tarjeta(context, peliculas[index]),
       ),
     );
   }
 
-  List<Widget> _tarjetas(context) {
-    return peliculas.map((pelicula) {
-      return Container(
+  Widget _tarjeta(BuildContext context, Pelicula pelicula) {
+    pelicula.uniqueId = '${pelicula.id}-poster';
+    print("movie horizontal" + pelicula.uniqueId);
+    print(pelicula.id);
+    Widget tarjeta = Hero(
+      tag: pelicula.uniqueId,
+      child: Container(
         margin: EdgeInsets.only(right: 15.0),
         child: Column(
           children: <Widget>[
@@ -56,11 +62,24 @@ class MovieHorizontal extends StatelessWidget {
             Text(
               pelicula.title,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.titleMedium,
             )
           ],
         ),
-      );
-    }).toList();
+      ),
+    );
+
+    return GestureDetector(
+      child: tarjeta,
+      onTap: () {
+        print("movie horizontal" + pelicula.uniqueId);
+        print(pelicula.id);
+        Navigator.pushNamed(context, '/detalle', arguments: pelicula);
+      },
+    );
   }
+
+  // List<Widget> _tarjetas(context) {
+  //   return peliculas.map((pelicula) {}).toList();
+  // }
 }

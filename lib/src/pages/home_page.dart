@@ -1,13 +1,14 @@
-import 'package:app_peliculas/src/models/pelicula_model.dart';
 import 'package:app_peliculas/src/providers/peliculas_provider.dart';
+import 'package:app_peliculas/src/search/search_delegate.dart';
 import 'package:app_peliculas/src/widgets/movie_horizontal.dart';
 import 'package:flutter/material.dart';
 
 import 'package:app_peliculas/src/widgets/card_swiper_widget.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
 
 class HomePage extends StatelessWidget {
   final peliculasProvider = new PeliculasProvider();
+
+  HomePage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +20,19 @@ class HomePage extends StatelessWidget {
         title: Text('Peliculas de cines'),
         backgroundColor: Colors.indigoAccent,
         actions: <Widget>[
-          IconButton(onPressed: () {}, icon: Icon(Icons.search))
+          IconButton(
+              onPressed: () {
+                showSearch(
+                  context: context,
+                  delegate: DataSearch(),
+                  //query: '',
+                );
+              },
+              icon: Icon(Icons.search))
         ],
       ),
       body: Container(
-        margin: EdgeInsets.only(bottom: 5.0),
+        padding: EdgeInsets.only(bottom: 5.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
@@ -48,7 +57,7 @@ class HomePage extends StatelessWidget {
           );
         } else {
           return Container(
-            height: 400.0,
+            height: 350.0,
             child: Center(
               child: CircularProgressIndicator(),
             ),
@@ -68,7 +77,7 @@ class HomePage extends StatelessWidget {
             padding: EdgeInsets.only(left: 20.0),
             child: Text(
               'Populares',
-              style: Theme.of(context).textTheme.subtitle1,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
           SizedBox(
